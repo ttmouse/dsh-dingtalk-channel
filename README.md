@@ -30,6 +30,9 @@
 # 从 npm
 dsh plugin --profile web add dsh-dingtalk-channel
 
+# 或从 GitHub（自动构建）
+dsh plugin --profile web add github:ttmouse/dsh-dingtalk-channel
+
 # 或从源码/本地目录（先 npm install && npm run build 产出 lib/）
 dsh plugin --profile web add /绝对路径/dsh-dingtalk-channel
 ```
@@ -102,6 +105,22 @@ agent 需要批准时（`approval/request`），channel 在对话里发审批消
 - **无 `/cd` / `/model use` / `/ws`**：工作区切换与模型热切换 v0.1 未实现（配置层字段已预留）。
 - 群消息去 @：`botName` 配置后只在首个 @ 匹配时剥离；不配置则剥离首个 `@…` 词元。
 - 审批与轮次并发：宿主 agent 自带排队；本 channel 每个会话最多一个待决审批。
+
+## 🔐 权限说明
+
+- **chat agent 与宿主会话同权限**：能执行 bash、读写文件（read/edit/write）、git、网络与技能（skills）——凡是你本地 `dsh` 会话能做的，聊天里都能做。请把机器人只加进可信的人/群。
+- **访问收窄（只收窄不兜底）**：`senderAllowlist` 限单聊发送者、`groupAllowlist` 限群会话、`approvers` 限审批人；最终以钉钉应用的**可见范围**为准。
+- **默认禁用** `ask_user_question` / `exit_plan_mode`（答案到不了本渠道的人类交互工具），审批改为对话内回复「允许一次 / 拒绝」。
+
+## 🔌 关闭方式
+
+- **停用**：从 profile 的 `dsh.profile.bundles` 移除 `dsh-dingtalk-channel`，重启 `dsh web` 即不再连接钉钉。
+- **卸载**：`dsh plugin --profile web rm dsh-dingtalk-channel`（或 `pnpm remove dsh-dingtalk-channel`），重启。
+- **彻底下线**：钉钉开发者后台删除该应用/机器人。
+
+## 📄 许可证
+
+MIT —— 见 [LICENSE](./LICENSE)。
 
 ## 开发
 
