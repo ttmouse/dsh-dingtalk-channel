@@ -1,0 +1,26 @@
+# Bundle patch applied over the selected DSH profile when this package is listed
+# in `dsh.profile.bundles`. The row id is deployment-local; the package name
+# must match package.json.
+
+- insert:
+    - id: dingtalk-channel
+      name: 'dsh-dingtalk-channel'
+      config:
+        # DingTalk 企业内部应用的凭证（钉钉开发者后台 → 应用凭证）：
+        # clientId（AppKey）与 clientSecret（AppSecret）。应用需开通 Stream
+        # 模式机器人（应用能力 → 机器人 → Stream 模式）并发布。
+        clientId: !!js process.env.DINGTALK_CLIENT_ID
+        clientSecret: !!js process.env.DINGTALK_CLIENT_SECRET
+        # botName: 机器人昵称，用于剥离群消息里的 @机器人 前缀（不配则剥离首个 @… 词元）
+        # cwd: an absolute workspace directory  # default is the host process cwd
+        # workspaceRoots: []   # directory prefixes /cd may enter; empty = any
+        # provider: deepseek                    # default is the host agentDefaultModel
+        # model: deepseek-chat
+        # preset: standard     # 挂进会话 agent 的 preset（部署组合了 roster 时）
+        # sessionScope: chat   # chat-sender 让共享群里每人一个 agent
+        # denyTools: [ask_user_question, exit_plan_mode]  # 答案到不了本渠道的人类交互工具
+        requireMention: true
+        # 名单只收窄，不兜底：谁能触达机器人由应用可见范围决定。
+        # senderAllowlist: []   # 空 = 服务应用可见范围内的任何人
+        # groupAllowlist: []    # 空 = 服务任何群
+        # approvers: []         # 空 = 能驱动该会话的人都可以审批
